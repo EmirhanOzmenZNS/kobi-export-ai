@@ -539,7 +539,11 @@ export default function App() {
             transform: `translate(${config.brand.x}px,${config.brand.y}px)`
           }}
         >
-          <Globe2 /> {config.brand.text}
+          <img src={logo} alt="KOBİ Export AI" className="logo" />
+<div className="brandText">
+  <strong>{config.brand.text}</strong>
+  <span>AI Destekli İhracat Platformu</span>
+</div>
         </div>
 
         <div className="links nav-center">

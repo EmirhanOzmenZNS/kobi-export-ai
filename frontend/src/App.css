@@ -767,3 +767,26 @@ margin-top:8px;
 font-size:14px;
 color:#7b8093;
 }
+.logo{
+  width:58px;
+  height:58px;
+  object-fit:contain;
+}
+
+.brandText{
+  display:flex;
+  flex-direction:column;
+  line-height:1.1;
+}
+
+.brandText strong{
+  font-size:26px;
+  font-weight:900;
+  color:#13295c;
+}
+
+.brandText span{
+  margin-top:5px;
+  font-size:13px;
+  color:#667085;
+}
