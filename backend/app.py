@@ -27,4 +27,6 @@ def logistics_cost():
 def directory(page_type):
     r=get_directory_page(page_type)
     return jsonify(r),404 if "error" in r else 200
-if __name__=="__main__": app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
