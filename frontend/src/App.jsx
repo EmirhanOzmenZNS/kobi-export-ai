@@ -98,6 +98,46 @@ const defaultConfig = {
     }
   ]
 };
+;
+
+const defaultAdminData = {
+  countries: [
+    { id: 1, name: "Almanya", region: "Avrupa", route: "Kara + Deniz", note: "Yüksek talep ve güçlü lojistik altyapı." },
+    { id: 2, name: "ABD", region: "Kuzey Amerika", route: "Deniz + Hava", note: "Büyük pazar fakat uzak mesafe ve yüksek maliyet." },
+    { id: 3, name: "BAE", region: "Orta Doğu", route: "Deniz + Hava", note: "Vergi avantajı ve bölgesel dağıtım potansiyeli." }
+  ],
+  categories: [
+    { id: 1, main: "Elektronik", sub: "Güvenlik Kamerası", hs: "8525" },
+    { id: 2, main: "Tekstil", sub: "Tişört", hs: "6109" },
+    { id: 3, main: "Mobilya", sub: "Ofis Masası", hs: "9403" }
+  ],
+  contents: [
+    {
+      id: 1,
+      type: "Mevzuat",
+      country: "Almanya",
+      product: "Güvenlik Kamerası",
+      title: "CE ve teknik uygunluk kontrolü",
+      text: "Elektronik ürünlerde CE uygunluğu, ürün güvenliği, etiketleme ve teknik dosya kontrolü yapılmalıdır."
+    },
+    {
+      id: 2,
+      type: "Vergi",
+      country: "BAE",
+      product: "Güvenlik Kamerası",
+      title: "Tahmini ithalat vergisi",
+      text: "Vergi oranı ürünün HS/GTİP sınıflandırmasına göre değişebilir. Nihai oran resmi tarife kaynaklarından doğrulanmalıdır."
+    },
+    {
+      id: 3,
+      type: "Lojistik",
+      country: "ABD",
+      product: "Mobilya",
+      title: "Deniz yolu sevkiyat planı",
+      text: "Uzak mesafe nedeniyle konteyner bazlı navlun, sigorta, liman masrafı ve teslim süresi ayrıca hesaplanmalıdır."
+    }
+  ]
+};
 
 function loadLocalConfig() {
   try {
@@ -117,6 +157,7 @@ export default function App() {
   const [login, setLogin] = useState({ u: "", p: "" });
   const [config, setConfig] = useState(loadLocalConfig());
   const [selected, setSelected] = useState(null);
+  const [adminData, setAdminData] = useState(defaultAdminData);
 
   const [mainCategories, setMainCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -155,6 +196,7 @@ export default function App() {
 
   useEffect(() => {
     loadFirebaseConfig();
+    loadAdminData();
   }, []);
 
   useEffect(() => {
@@ -239,6 +281,34 @@ export default function App() {
     } catch (error) {
       console.error(error);
       alert("Firebase kaydı sırasında hata oluştu.");
+    }
+  }
+
+  async function loadAdminData() {
+    try {
+      const ref = doc(db, "adminData", "main");
+      const snap = await getDoc(ref);
+
+      if (snap.exists()) {
+        setAdminData(snap.data());
+      }
+    } catch (error) {
+      console.log("Admin verileri okunamadı:", error);
+    }
+  }
+
+  async function saveAdminData(newData) {
+    try {
+      await setDoc(doc(db, "adminData", "main"), {
+        ...newData,
+        updatedAt: new Date().toISOString()
+      });
+
+      setAdminData(newData);
+      alert("Veri yönetimi kaydedildi. Canlı sistemde kullanılmaya hazır.");
+    } catch (error) {
+      console.error(error);
+      alert("Veri kaydı sırasında hata oluştu.");
     }
   }
 
@@ -488,6 +558,9 @@ export default function App() {
           setSelected={setSelected}
           setPage={setPage}
           saveFirebaseConfig={saveFirebaseConfig}
+          adminData={adminData}
+          setAdminData={setAdminData}
+          saveAdminData={saveAdminData}
           logoutAdmin={logoutAdmin}
         />
       ) : page === "home" ? (
@@ -592,6 +665,9 @@ function VisualEditor({
   setSelected,
   setPage,
   saveFirebaseConfig,
+  adminData,
+  setAdminData,
+  saveAdminData,
   logoutAdmin
 }) {
   const update = (path, val) => {
@@ -766,7 +842,7 @@ function VisualEditor({
             />
           )}
 
-          <DataManagementBox />
+          <DataManagementBox adminData={adminData} setAdminData={setAdminData} saveAdminData={saveAdminData} />
 
           <button onClick={() => saveFirebaseConfig(config)}>
             <Save /> Kaydet ve Yayınla
@@ -782,23 +858,229 @@ function VisualEditor({
 }
 
 
-function DataManagementBox() {
+function DataManagementBox({ adminData, setAdminData, saveAdminData }) {
+  const [tab, setTab] = useState("countries");
+
+  const updateCountry = (index, key, value) => {
+    const data = structuredClone(adminData);
+    data.countries[index][key] = value;
+    setAdminData(data);
+  };
+
+  const addCountry = () => {
+    const data = structuredClone(adminData);
+    data.countries.push({
+      id: Date.now(),
+      name: "Yeni Ülke",
+      region: "Bölge",
+      route: "Deniz",
+      note: "Kısa açıklama giriniz."
+    });
+    setAdminData(data);
+  };
+
+  const deleteCountry = (index) => {
+    const data = structuredClone(adminData);
+    data.countries.splice(index, 1);
+    setAdminData(data);
+  };
+
+  const updateCategory = (index, key, value) => {
+    const data = structuredClone(adminData);
+    data.categories[index][key] = value;
+    setAdminData(data);
+  };
+
+  const addCategory = () => {
+    const data = structuredClone(adminData);
+    data.categories.push({
+      id: Date.now(),
+      main: "Yeni Ana Kategori",
+      sub: "Yeni Alt Kategori",
+      hs: "0000"
+    });
+    setAdminData(data);
+  };
+
+  const deleteCategory = (index) => {
+    const data = structuredClone(adminData);
+    data.categories.splice(index, 1);
+    setAdminData(data);
+  };
+
+  const updateContent = (index, key, value) => {
+    const data = structuredClone(adminData);
+    data.contents[index][key] = value;
+    setAdminData(data);
+  };
+
+  const addContent = () => {
+    const data = structuredClone(adminData);
+    data.contents.push({
+      id: Date.now(),
+      type: "Mevzuat",
+      country: "Ülke",
+      product: "Ürün",
+      title: "Başlık",
+      text: "Açıklama metni giriniz."
+    });
+    setAdminData(data);
+  };
+
+  const deleteContent = (index) => {
+    const data = structuredClone(adminData);
+    data.contents.splice(index, 1);
+    setAdminData(data);
+  };
+
   return (
-    <div className="data-management-box">
-      <h3>Veri Yönetimi Modülü</h3>
+    <div className="data-management-box real-data-manager">
+      <h3>Canlı Veri Yönetimi</h3>
       <p>
-        Bu alan canlı sistemde ülke, kategori, mevzuat, teşvik ve lojistik verilerinin
-        Firebase üzerinden yönetilebilmesi için ayrıldı.
+        Bu bölümden ülke, kategori ve mevzuat içeriklerini düzenleyebilirsin.
+        Kaydet dediğinde bilgiler Firebase’e yazılır.
       </p>
-      <ul>
-        <li>Ülke verisi düzenleme</li>
-        <li>Kategori / alt kategori güncelleme</li>
-        <li>Vergi ve gümrük notları düzenleme</li>
-        <li>Lojistik rota ve maliyet açıklaması yönetimi</li>
-      </ul>
-      <small>
-        Bir sonraki adımda bu alanı gerçek tablo düzenleme ekranına çevireceğiz.
-      </small>
+
+      <div className="data-tabs">
+        <button
+          className={tab === "countries" ? "active" : ""}
+          onClick={() => setTab("countries")}
+        >
+          Ülkeler
+        </button>
+        <button
+          className={tab === "categories" ? "active" : ""}
+          onClick={() => setTab("categories")}
+        >
+          Kategoriler
+        </button>
+        <button
+          className={tab === "contents" ? "active" : ""}
+          onClick={() => setTab("contents")}
+        >
+          Mevzuat / Vergi / Lojistik
+        </button>
+      </div>
+
+      {tab === "countries" && (
+        <div className="data-editor-list">
+          <div className="data-editor-head">
+            <h4>Ülke Listesi</h4>
+            <button onClick={addCountry}>+ Ülke Ekle</button>
+          </div>
+
+          {adminData.countries.map((item, index) => (
+            <div className="data-row" key={item.id}>
+              <input
+                value={item.name}
+                onChange={(e) => updateCountry(index, "name", e.target.value)}
+                placeholder="Ülke"
+              />
+              <input
+                value={item.region}
+                onChange={(e) => updateCountry(index, "region", e.target.value)}
+                placeholder="Bölge"
+              />
+              <input
+                value={item.route}
+                onChange={(e) => updateCountry(index, "route", e.target.value)}
+                placeholder="Rota"
+              />
+              <textarea
+                value={item.note}
+                onChange={(e) => updateCountry(index, "note", e.target.value)}
+                placeholder="Not"
+              />
+              <button className="danger small-danger" onClick={() => deleteCountry(index)}>
+                Sil
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === "categories" && (
+        <div className="data-editor-list">
+          <div className="data-editor-head">
+            <h4>Kategori Listesi</h4>
+            <button onClick={addCategory}>+ Kategori Ekle</button>
+          </div>
+
+          {adminData.categories.map((item, index) => (
+            <div className="data-row" key={item.id}>
+              <input
+                value={item.main}
+                onChange={(e) => updateCategory(index, "main", e.target.value)}
+                placeholder="Ana kategori"
+              />
+              <input
+                value={item.sub}
+                onChange={(e) => updateCategory(index, "sub", e.target.value)}
+                placeholder="Alt kategori"
+              />
+              <input
+                value={item.hs}
+                onChange={(e) => updateCategory(index, "hs", e.target.value)}
+                placeholder="HS/GTİP"
+              />
+              <button className="danger small-danger" onClick={() => deleteCategory(index)}>
+                Sil
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === "contents" && (
+        <div className="data-editor-list">
+          <div className="data-editor-head">
+            <h4>İçerik Yönetimi</h4>
+            <button onClick={addContent}>+ İçerik Ekle</button>
+          </div>
+
+          {adminData.contents.map((item, index) => (
+            <div className="data-row content-row" key={item.id}>
+              <select
+                value={item.type}
+                onChange={(e) => updateContent(index, "type", e.target.value)}
+              >
+                <option>Mevzuat</option>
+                <option>Vergi</option>
+                <option>Gümrük</option>
+                <option>Teşvik</option>
+                <option>Lojistik</option>
+              </select>
+              <input
+                value={item.country}
+                onChange={(e) => updateContent(index, "country", e.target.value)}
+                placeholder="Ülke"
+              />
+              <input
+                value={item.product}
+                onChange={(e) => updateContent(index, "product", e.target.value)}
+                placeholder="Ürün"
+              />
+              <input
+                value={item.title}
+                onChange={(e) => updateContent(index, "title", e.target.value)}
+                placeholder="Başlık"
+              />
+              <textarea
+                value={item.text}
+                onChange={(e) => updateContent(index, "text", e.target.value)}
+                placeholder="Açıklama"
+              />
+              <button className="danger small-danger" onClick={() => deleteContent(index)}>
+                Sil
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <button className="save-data-button" onClick={() => saveAdminData(adminData)}>
+        Veri Yönetimini Kaydet
+      </button>
     </div>
   );
 }
