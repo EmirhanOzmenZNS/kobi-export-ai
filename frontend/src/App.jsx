@@ -8,7 +8,7 @@ import {
   Coins,
   Edit3,
   FileText,
-  Gift,
+  FileDown,
   Globe2,
   Landmark,
   Loader2,
@@ -18,13 +18,13 @@ import {
   Save,
   Settings,
   Ship,
-  Truck,
   Unlock
 } from "lucide-react";
 import "./App.css";
 import { db } from "./firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 const API_URL = "https://kobi-export-ai.onrender.com";
 
 const defaultConfig = {
@@ -336,6 +336,77 @@ export default function App() {
     setDirLoading(false);
   }
 
+  async function downloadReportPdf() {
+    if (!analysis || analysis.error) {
+      alert("Önce ürün analizi yapmalısın.");
+      return;
+    }
+
+    const reportElement = document.querySelector(".report-area");
+
+    if (!reportElement) {
+      alert("Rapor alanı bulunamadı.");
+      return;
+    }
+
+    const downloadBox = document.querySelector(".download-report-box");
+    const oldDisplay = downloadBox ? downloadBox.style.display : "";
+
+    if (downloadBox) {
+      downloadBox.style.display = "none";
+    }
+
+    document.body.classList.add("pdf-exporting");
+
+    try {
+      const canvas = await html2canvas(reportElement, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: document.documentElement.scrollWidth
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      const fileName = `ihracat-analiz-raporu-${analysis.sub_category || "urun"}`
+        .replaceAll(" ", "-")
+        .replaceAll("/", "-")
+        .toLowerCase();
+
+      pdf.save(`${fileName}.pdf`);
+    } catch (error) {
+      console.error(error);
+      alert("PDF oluşturulurken hata oluştu.");
+    } finally {
+      document.body.classList.remove("pdf-exporting");
+
+      if (downloadBox) {
+        downloadBox.style.display = oldDisplay;
+      }
+    }
+  }
+
   const panelProps = {
     mainCategories,
     subCategories,
@@ -368,7 +439,7 @@ export default function App() {
 
   return (
     <div className={admin && page === "admin" ? "page edit-mode" : "page"}>
-      <nav className="nav">
+      <nav className="nav nav-clean">
         <div
           className="brand"
           onClick={() => admin && setSelected("brand")}
@@ -381,29 +452,25 @@ export default function App() {
           <Globe2 /> {config.brand.text}
         </div>
 
-        <div className="links">
+        <div className="links nav-center">
           <button onClick={() => setPage("home")}>Ana Sayfa</button>
-          <button onClick={() => (admin ? setPage("admin") : setPage("login"))}>
-            <Settings /> Admin
-          </button>
           <button onClick={() => openDir("mevzuatlar")}>
             <FileText /> Mevzuatlar
           </button>
           <button onClick={() => openDir("gumruk")}>
             <Landmark /> Gümrük
           </button>
-          <button onClick={() => openDir("tesvikler")}>
-            <Gift /> Teşvikler
-          </button>
           <button onClick={() => openDir("vergiler")}>
             <Coins /> Vergiler
           </button>
-          <button onClick={() => openDir("lojistik")}>
-            <Truck /> Lojistik
-          </button>
         </div>
 
-        <div className="origin">Türkiye sabit</div>
+        <button
+          className="admin-top-button"
+          onClick={() => (admin ? setPage("admin") : setPage("login"))}
+        >
+          <Settings /> Admin
+        </button>
       </nav>
 
       {page === "login" ? (
@@ -429,7 +496,7 @@ export default function App() {
               return C ? <C key={p.id} panel={p} {...panelProps} /> : null;
             })}
 
-          {analysis && !analysis.error && <Results a={analysis} best={best} />}
+          {analysis && !analysis.error && <Results a={analysis} best={best} downloadReportPdf={downloadReportPdf} />}
           {analysis?.error && <div className="error">{analysis.error}</div>}
         </main>
       ) : (
@@ -694,6 +761,8 @@ function VisualEditor({
             />
           )}
 
+          <DataManagementBox />
+
           <button onClick={() => saveFirebaseConfig(config)}>
             <Save /> Kaydet ve Yayınla
           </button>
@@ -704,6 +773,28 @@ function VisualEditor({
         </div>
       </div>
     </section>
+  );
+}
+
+
+function DataManagementBox() {
+  return (
+    <div className="data-management-box">
+      <h3>Veri Yönetimi Modülü</h3>
+      <p>
+        Bu alan canlı sistemde ülke, kategori, mevzuat, teşvik ve lojistik verilerinin
+        Firebase üzerinden yönetilebilmesi için ayrıldı.
+      </p>
+      <ul>
+        <li>Ülke verisi düzenleme</li>
+        <li>Kategori / alt kategori güncelleme</li>
+        <li>Vergi ve gümrük notları düzenleme</li>
+        <li>Lojistik rota ve maliyet açıklaması yönetimi</li>
+      </ul>
+      <small>
+        Bir sonraki adımda bu alanı gerçek tablo düzenleme ekranına çevireceğiz.
+      </small>
+    </div>
   );
 }
 
@@ -1105,54 +1196,136 @@ function Cost({ c }) {
   );
 }
 
-function Results({ a, best }) {
+function Results({ a, best, downloadReportPdf }) {
+  const totalCountries = a.results?.length || 0;
+  const topThree = a.results?.slice(0, 3) || [];
+
   return (
-    <section>
-      <div className="summary">
+    <section className="report-area">
+      <div className="analysis-header">
+        <div>
+          <span className="section-kicker">Analiz Sonucu</span>
+          <h2>Ürün Pazarı İnceleme Raporu</h2>
+          <p>
+            Seçilen ürün için hedef ülke, puan kırılımları, lojistik rota,
+            vergi durumu ve ihracat yol haritası ayrı bölümler halinde gösterilir.
+          </p>
+        </div>
+      </div>
+
+      <div className="summary clean-summary">
         <div>
           <MapPinned />
           <p>En uygun pazar</p>
           <h2>{a.best_country}</h2>
+          <small>{a.main_category} / {a.sub_category}</small>
         </div>
 
         {best && (
           <div>
             <CheckCircle2 />
-            <p>Skor</p>
+            <p>Genel skor</p>
             <h2>{best.market_score}/10</h2>
+            <small>Talep + lojistik + vergi + teşvik</small>
           </div>
         )}
 
-        {best && (
-          <div>
-            <Ship />
-            <p>Rota</p>
-            <h2>{best.route.route_type}</h2>
-          </div>
-        )}
-      </div>
-
-      <div className="ai">
-        <Brain />
         <div>
-          <h2>Yapay Zekâ Yorumu</h2>
-          <p>{a.ai_recommendation}</p>
+          <Ship />
+          <p>Karşılaştırılan ülke</p>
+          <h2>{totalCountries}</h2>
+          <small>En uygun 10 hedef pazar</small>
         </div>
       </div>
 
-      <div className="country-grid">
-        {a.results.map((x, i) => (
-          <Country key={x.country} x={x} i={i} />
-        ))}
+      <div className="result-section">
+        <div className="section-title-row">
+          <div>
+            <span className="section-kicker">01</span>
+            <h2>Yapay Zekâ Destekli Yönetici Özeti</h2>
+          </div>
+        </div>
+
+        <div className="ai professional-ai">
+          <Brain />
+          <div>
+            <p>{a.ai_recommendation}</p>
+            <p>
+              Bu sonuç, KOBİ seviyesindeki bir ihracatçı için ilk pazar araştırması,
+              hedef ülke seçimi ve operasyonel yol haritası oluşturma amacıyla
+              kullanılabilir. Nihai ihracat kararı öncesinde güncel GTİP, ithalat vergisi,
+              ürün sertifikası, alıcı güvenilirliği ve lojistik teklifleri ayrıca doğrulanmalıdır.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="roadmap">
-        <h2>{a.best_country} İçin Yol Haritası</h2>
-        <ol>
-          {a.roadmap.map((r, i) => (
-            <li key={i}>{r}</li>
+      <div className="result-section">
+        <div className="section-title-row">
+          <div>
+            <span className="section-kicker">02</span>
+            <h2>İlk 3 Hedef Pazar</h2>
+          </div>
+        </div>
+
+        <div className="top-market-grid">
+          {topThree.map((x, i) => (
+            <div className="top-market-card" key={x.country}>
+              <span>#{i + 1}</span>
+              <h3>{x.country}</h3>
+              <p>{x.region}</p>
+              <b>{x.market_score}/10</b>
+              <small>{x.route.route_type} / {x.route.distance_km_from_turkey} km</small>
+            </div>
           ))}
-        </ol>
+        </div>
+      </div>
+
+      <div className="result-section">
+        <div className="section-title-row">
+          <div>
+            <span className="section-kicker">03</span>
+            <h2>Ülke Puan Detayları</h2>
+            <p>Her ülkenin neden o puanı aldığı aşağıdaki kartlarda ayrı ayrı gösterilir.</p>
+          </div>
+        </div>
+
+        <div className="country-grid clean-country-grid">
+          {a.results.map((x, i) => (
+            <Country key={x.country} x={x} i={i} />
+          ))}
+        </div>
+      </div>
+
+      <div className="result-section">
+        <div className="section-title-row">
+          <div>
+            <span className="section-kicker">04</span>
+            <h2>{a.best_country} İçin Yol Haritası</h2>
+          </div>
+        </div>
+
+        <div className="roadmap clean-roadmap">
+          <ol>
+            {a.roadmap.map((r, i) => (
+              <li key={i}>{r}</li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      <div className="download-report-box">
+        <div>
+          <h2>Raporu inceledin mi?</h2>
+          <p>
+            Ülke puanlarını, hedef pazar özetini ve yol haritasını inceledikten sonra
+            raporu PDF olarak indirebilirsin.
+          </p>
+        </div>
+
+        <button onClick={downloadReportPdf}>
+          <FileDown /> PDF Olarak İndir
+        </button>
       </div>
     </section>
   );
