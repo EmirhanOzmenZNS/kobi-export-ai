@@ -1,0 +1,51 @@
+﻿country,region,distance_km_from_turkey,default_route_type,logistics_index,payment_score,market_access_score,incentive_score,base_tax_rate
+Almanya,Avrupa,2100,Kara + Deniz,4.1,9,8,7,5.2
+ABD,Kuzey Amerika,9500,Deniz + Hava,3.8,9,6,6,7.5
+Fransa,Avrupa,2400,Kara + Deniz,3.9,8,7,6,5.8
+İngiltere,Avrupa,2900,Kara + Deniz,3.8,8,7,6,6.0
+Hollanda,Avrupa,2600,Kara + Deniz,4.3,9,9,7,5.0
+İtalya,Avrupa,1700,Kara + Deniz,3.7,8,7,6,5.7
+İspanya,Avrupa,3000,Kara + Deniz,3.7,7,7,6,6.1
+Polonya,Avrupa,1900,Kara,3.6,7,8,8,5.4
+BAE,Orta Doğu,3000,Deniz + Hava,4.0,8,9,10,4.5
+Suudi Arabistan,Orta Doğu,2500,Deniz + Kara,3.5,7,7,9,5.0
+Kanada,Kuzey Amerika,8200,Deniz + Hava,3.8,9,8,7,6.8
+İsviçre,Avrupa,1900,Kara + Deniz,4.0,10,8,7,5.3
+Japonya,Asya,9000,Deniz + Hava,4.1,9,7,6,7.2
+Çin,Asya,7500,Deniz + Demiryolu,3.7,7,6,7,8.0
+Güney Kore,Asya,8200,Deniz + Hava,4.0,8,8,8,6.9
+Singapur,Asya,8500,Deniz + Hava,4.3,10,10,9,3.8
+Avustralya,Okyanusya,14500,Deniz + Hava,3.8,9,8,7,6.5
+Belçika,Avrupa,2500,Kara + Deniz,4.0,8,8,7,5.1
+Avusturya,Avrupa,1600,Kara,4.0,9,8,7,5.3
+Çekya,Avrupa,1800,Kara,3.7,8,8,7,5.4
+Romanya,Avrupa,650,Kara + Deniz,3.3,6,8,8,4.6
+Bulgaristan,Avrupa,550,Kara,3.2,6,8,8,4.3
+Yunanistan,Avrupa,800,Kara + Deniz,3.2,6,7,6,4.4
+Macaristan,Avrupa,1500,Kara,3.5,7,8,7,5.0
+Portekiz,Avrupa,3400,Deniz + Kara,3.5,7,7,6,6.0
+İsveç,Avrupa,3000,Kara + Deniz,4.0,9,8,7,5.5
+Norveç,Avrupa,3400,Deniz + Kara,3.8,9,8,6,5.7
+Danimarka,Avrupa,2700,Kara + Deniz,4.1,9,8,7,5.2
+Finlandiya,Avrupa,3000,Kara + Deniz,4.0,9,8,6,5.6
+İrlanda,Avrupa,3500,Deniz + Kara,3.6,8,7,6,6.2
+Meksika,Kuzey Amerika,11500,Deniz + Hava,3.3,6,6,6,8.5
+Brezilya,Güney Amerika,10500,Deniz + Hava,3.1,6,5,6,9.0
+Şili,Güney Amerika,13000,Deniz + Hava,3.3,7,7,6,7.8
+Arjantin,Güney Amerika,12200,Deniz + Hava,3.0,5,5,5,9.2
+Güney Afrika,Afrika,7800,Deniz + Hava,3.2,6,6,6,7.5
+Mısır,Afrika,1300,Deniz + Kara,3.1,5,6,8,5.4
+Fas,Afrika,3500,Deniz + Kara,3.0,6,7,7,6.0
+Cezayir,Afrika,3000,Deniz,2.8,5,5,6,7.0
+Tunus,Afrika,2200,Deniz,3.0,5,6,7,5.8
+Nijerya,Afrika,5200,Deniz + Hava,2.7,4,5,6,8.2
+Katar,Orta Doğu,2700,Deniz + Hava,3.8,8,8,9,4.7
+Kuveyt,Orta Doğu,2200,Deniz + Kara,3.3,7,7,8,5.0
+Bahreyn,Orta Doğu,2500,Deniz + Hava,3.5,7,8,8,4.8
+Umman,Orta Doğu,3200,Deniz,3.4,7,8,8,5.1
+Hindistan,Asya,5200,Deniz + Hava,3.1,6,6,7,8.8
+Endonezya,Asya,9000,Deniz + Hava,3.0,5,6,7,8.5
+Malezya,Asya,8300,Deniz + Hava,3.5,7,8,8,6.5
+Tayland,Asya,7400,Deniz + Hava,3.4,6,7,7,6.8
+Vietnam,Asya,8200,Deniz + Hava,3.3,6,7,7,7.2
+Rusya,Avrasya,1800,Kara + Deniz,3.3,5,5,5,8.5

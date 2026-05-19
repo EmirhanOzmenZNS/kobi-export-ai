@@ -1,0 +1,201 @@
+﻿main_category,sub_category,hs_code
+Elektronik,Güvenlik Kamerası,8525
+Elektronik,Akıllı Saat,8525
+Elektronik,Bluetooth Kulaklık,8525
+Elektronik,Telefon Aksesuarı,8525
+Elektronik,Bilgisayar Parçası,8525
+Elektronik,LED Aydınlatma,8525
+Elektronik,Akıllı Ev Cihazı,8525
+Elektronik,Powerbank,8525
+Elektronik,Router Modem,8525
+Elektronik,Elektronik Sensör,8525
+Tekstil,Tişört,6109
+Tekstil,Pantolon,6109
+Tekstil,Gömlek,6109
+Tekstil,Ceket,6109
+Tekstil,İç Giyim,6109
+Tekstil,Spor Giyim,6109
+Tekstil,Bebek Giyim,6109
+Tekstil,Ev Tekstili,6109
+Tekstil,Havlu,6109
+Tekstil,Çorap,6109
+Mobilya,Ofis Masası,9403
+Mobilya,Sandalye,9403
+Mobilya,Koltuk,9403
+Mobilya,Yatak Odası Takımı,9403
+Mobilya,Mutfak Dolabı,9403
+Mobilya,Bahçe Mobilyası,9403
+Mobilya,Raf Sistemi,9403
+Mobilya,Yatak,9403
+Mobilya,TV Ünitesi,9403
+Mobilya,Otel Mobilyası,9403
+Gıda,Bisküvi,1905
+Gıda,Çikolata,1905
+Gıda,Makarna,1905
+Gıda,Zeytinyağı,1905
+Gıda,Kuru Meyve,1905
+Gıda,Baharat,1905
+Gıda,Konserve Gıda,1905
+Gıda,İçecek,1905
+Gıda,Şekerleme,1905
+Gıda,Unlu Mamul,1905
+Kozmetik,Cilt Bakım Kremi,3304
+Kozmetik,Şampuan,3304
+Kozmetik,Parfüm,3304
+Kozmetik,Makyaj Ürünü,3304
+Kozmetik,Sabun,3304
+Kozmetik,Deodorant,3304
+Kozmetik,Saç Bakım Ürünü,3304
+Kozmetik,Güneş Kremi,3304
+Kozmetik,Ağız Bakım Ürünü,3304
+Kozmetik,Kolonya,3304
+Ayakkabı,Spor Ayakkabı,6403
+Ayakkabı,Deri Ayakkabı,6403
+Ayakkabı,Bot,6403
+Ayakkabı,Terlik,6403
+Ayakkabı,Çocuk Ayakkabısı,6403
+Ayakkabı,İş Güvenliği Ayakkabısı,6403
+Ayakkabı,Kadın Ayakkabısı,6403
+Ayakkabı,Erkek Ayakkabısı,6403
+Ayakkabı,Outdoor Ayakkabı,6403
+Ayakkabı,Sandalet,6403
+Otomotiv Yedek Parça,Fren Balatası,8708
+Otomotiv Yedek Parça,Filtre,8708
+Otomotiv Yedek Parça,Far,8708
+Otomotiv Yedek Parça,Tampon,8708
+Otomotiv Yedek Parça,Ayna,8708
+Otomotiv Yedek Parça,Akü,8708
+Otomotiv Yedek Parça,Lastik,8708
+Otomotiv Yedek Parça,Jant,8708
+Otomotiv Yedek Parça,Silecek,8708
+Otomotiv Yedek Parça,Motor Parçası,8708
+Medikal Ürünler,Tıbbi Maske,9018
+Medikal Ürünler,Şırınga,9018
+Medikal Ürünler,Eldiven,9018
+Medikal Ürünler,Tıbbi Cihaz,9018
+Medikal Ürünler,Dişçilik Ürünü,9018
+Medikal Ürünler,Ortopedik Ürün,9018
+Medikal Ürünler,Laboratuvar Sarf,9018
+Medikal Ürünler,Hasta Yatağı,9018
+Medikal Ürünler,Sterilizasyon Ürünü,9018
+Medikal Ürünler,Tanı Kiti,9018
+Petshop Ürünleri,Kedi Maması,2309
+Petshop Ürünleri,Köpek Maması,2309
+Petshop Ürünleri,Kedi Kumu,2309
+Petshop Ürünleri,Evcil Hayvan Oyuncağı,2309
+Petshop Ürünleri,Akvaryum Ürünü,2309
+Petshop Ürünleri,Tasma,2309
+Petshop Ürünleri,Pet Bakım Ürünü,2309
+Petshop Ürünleri,Kafes,2309
+Petshop Ürünleri,Mama Kabı,2309
+Petshop Ürünleri,Pet Yatağı,2309
+Plastik Ürünler,Plastik Ambalaj,3923
+Plastik Ürünler,Plastik Kap,3923
+Plastik Ürünler,Plastik Boru,3923
+Plastik Ürünler,Plastik Levha,3923
+Plastik Ürünler,Plastik Oyuncak Parçası,3923
+Plastik Ürünler,Plastik Mobilya Parçası,3923
+Plastik Ürünler,Poşet,3923
+Plastik Ürünler,Endüstriyel Plastik,3923
+Plastik Ürünler,Plastik Şişe,3923
+Plastik Ürünler,Plastik Kutu,3923
+Ev Gereçleri,Tencere,7323
+Ev Gereçleri,Tava,7323
+Ev Gereçleri,Saklama Kabı,7323
+Ev Gereçleri,Mutfak Aleti,7323
+Ev Gereçleri,Çatal Kaşık,7323
+Ev Gereçleri,Banyo Aksesuarı,7323
+Ev Gereçleri,Temizlik Gereci,7323
+Ev Gereçleri,Cam Ev Eşyası,7323
+Ev Gereçleri,Seramik Ürün,7323
+Ev Gereçleri,Mutfak Seti,7323
+Oyuncak,Eğitici Oyuncak,9503
+Oyuncak,Peluş Oyuncak,9503
+Oyuncak,Plastik Oyuncak,9503
+Oyuncak,Ahşap Oyuncak,9503
+Oyuncak,Puzzle,9503
+Oyuncak,Bebek Oyuncağı,9503
+Oyuncak,Uzaktan Kumandalı Oyuncak,9503
+Oyuncak,Kutu Oyunu,9503
+Oyuncak,Açık Hava Oyuncağı,9503
+Oyuncak,Figür Oyuncak,9503
+Kırtasiye,Defter,4820
+Kırtasiye,Kalem,4820
+Kırtasiye,Dosya Klasör,4820
+Kırtasiye,Ajanda,4820
+Kırtasiye,Yapıştırıcı,4820
+Kırtasiye,Boya Kalemi,4820
+Kırtasiye,Ofis Kağıdı,4820
+Kırtasiye,Zarf,4820
+Kırtasiye,Etiket,4820
+Kırtasiye,Okul Seti,4820
+Tarım Ürünleri,Domates,0702
+Tarım Ürünleri,Narenciye,0702
+Tarım Ürünleri,Elma,0702
+Tarım Ürünleri,Fındık,0702
+Tarım Ürünleri,Kuru Üzüm,0702
+Tarım Ürünleri,Bakliyat,0702
+Tarım Ürünleri,Zeytin,0702
+Tarım Ürünleri,Biber,0702
+Tarım Ürünleri,Patates,0702
+Tarım Ürünleri,Soğan,0702
+Makine,Paketleme Makinesi,8422
+Makine,CNC Parçası,8422
+Makine,Tarım Makinesi,8422
+Makine,Pompa,8422
+Makine,Kompresör,8422
+Makine,Jeneratör,8422
+Makine,Endüstriyel Fırın,8422
+Makine,Konveyör,8422
+Makine,Kesim Makinesi,8422
+Makine,Dolum Makinesi,8422
+Kimyasal Ürünler,Temizlik Kimyasalı,3402
+Kimyasal Ürünler,Boya,3402
+Kimyasal Ürünler,Yapıştırıcı,3402
+Kimyasal Ürünler,Endüstriyel Yağ,3402
+Kimyasal Ürünler,Gübre,3402
+Kimyasal Ürünler,Plastik Hammadde,3402
+Kimyasal Ürünler,Kozmetik Hammaddesi,3402
+Kimyasal Ürünler,Su Arıtma Kimyasalı,3402
+Kimyasal Ürünler,Reçine,3402
+Kimyasal Ürünler,Solvent,3402
+İnşaat Malzemeleri,Seramik Karo,6907
+İnşaat Malzemeleri,Çimento,6907
+İnşaat Malzemeleri,Demir Çelik Profil,6907
+İnşaat Malzemeleri,Alüminyum Profil,6907
+İnşaat Malzemeleri,PVC Doğrama,6907
+İnşaat Malzemeleri,Yalıtım Malzemesi,6907
+İnşaat Malzemeleri,Boya Malzemesi,6907
+İnşaat Malzemeleri,Vitrifiye,6907
+İnşaat Malzemeleri,Cam Ürün,6907
+İnşaat Malzemeleri,Kapı Pencere Aksamı,6907
+Takı ve Aksesuar,Gümüş Takı,7117
+Takı ve Aksesuar,Bijuteri,7117
+Takı ve Aksesuar,Saat,7117
+Takı ve Aksesuar,Gözlük,7117
+Takı ve Aksesuar,Çanta,7117
+Takı ve Aksesuar,Kemer,7117
+Takı ve Aksesuar,Cüzdan,7117
+Takı ve Aksesuar,Saç Aksesuarı,7117
+Takı ve Aksesuar,Anahtarlık,7117
+Takı ve Aksesuar,Moda Aksesuarı,7117
+Ambalaj,Karton Kutu,4819
+Ambalaj,Koli,4819
+Ambalaj,Etiket,4819
+Ambalaj,Streç Film,4819
+Ambalaj,Shrink Ambalaj,4819
+Ambalaj,Cam Şişe,4819
+Ambalaj,Metal Kutu,4819
+Ambalaj,Kağıt Poşet,4819
+Ambalaj,Plastik Ambalaj,4819
+Ambalaj,Palet,4819
+E-Ticaret Ürünleri,Telefon Kılıfı,3926
+E-Ticaret Ürünleri,Mutfak Organizer,3926
+E-Ticaret Ürünleri,LED Ürün,3926
+E-Ticaret Ürünleri,Mini Elektronik,3926
+E-Ticaret Ürünleri,Araç Aksesuarı,3926
+E-Ticaret Ürünleri,Kişisel Bakım Cihazı,3926
+E-Ticaret Ürünleri,Spor Aksesuarı,3926
+E-Ticaret Ürünleri,Ev Dekor Ürünü,3926
+E-Ticaret Ürünleri,Ofis Aksesuarı,3926
+E-Ticaret Ürünleri,Hediye Ürün,3926
