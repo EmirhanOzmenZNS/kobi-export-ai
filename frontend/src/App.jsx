@@ -9,15 +9,20 @@ import {
   Edit3,
   FileText,
   FileDown,
+  Gauge,
   Globe2,
   Landmark,
+  LineChart,
   Loader2,
   Lock,
   MapPinned,
   PackageSearch,
+  Route,
   Save,
   Settings,
+  ShieldCheck,
   Ship,
+  TrendingUp,
   Unlock
 } from "lucide-react";
 import "./App.css";
@@ -1196,45 +1201,183 @@ function Cost({ c }) {
   );
 }
 
+
+const countryFlags = {
+  Almanya: "🇩🇪",
+  ABD: "🇺🇸",
+  Fransa: "🇫🇷",
+  İngiltere: "🇬🇧",
+  Hollanda: "🇳🇱",
+  İtalya: "🇮🇹",
+  İspanya: "🇪🇸",
+  Polonya: "🇵🇱",
+  BAE: "🇦🇪",
+  "Suudi Arabistan": "🇸🇦",
+  Kanada: "🇨🇦",
+  İsviçre: "🇨🇭",
+  Japonya: "🇯🇵",
+  Çin: "🇨🇳",
+  "Güney Kore": "🇰🇷",
+  Singapur: "🇸🇬",
+  Avustralya: "🇦🇺",
+  Belçika: "🇧🇪",
+  Avusturya: "🇦🇹",
+  Çekya: "🇨🇿",
+  Romanya: "🇷🇴",
+  Bulgaristan: "🇧🇬",
+  Yunanistan: "🇬🇷",
+  Macaristan: "🇭🇺",
+  Portekiz: "🇵🇹"
+};
+
+function getFlag(country) {
+  return countryFlags[country] || "🌍";
+}
+
+function getScoreLevel(score) {
+  if (score >= 8) return "Yüksek Uygunluk";
+  if (score >= 7) return "Güçlü Potansiyel";
+  if (score >= 6) return "Orta Potansiyel";
+  return "Dikkatli İncelenmeli";
+}
+
+function getRiskLevel(item) {
+  const tax = Number(item?.raw_data?.tax_rate_estimate || 0);
+  const distance = Number(item?.route?.distance_km_from_turkey || 0);
+
+  if (tax < 6 && distance < 3000) return "Düşük Risk";
+  if (tax < 8.5 && distance < 7000) return "Orta Risk";
+  return "Yüksek Kontrol Gerektirir";
+}
+
+function DetailedAiComment({ a, best }) {
+  if (!best) return null;
+
+  const scores = best.scores || {};
+  const risk = getRiskLevel(best);
+
+  return (
+    <div className="ai-detail-grid">
+      <div className="ai-detail-card">
+        <h3>Neden {best.country}?</h3>
+        <p>
+          {a.sub_category} ürünü için {best.country} pazarı, genel uygunluk skoru
+          {best.market_score}/10 olduğu için sistem tarafından ilk sırada önerilmiştir.
+          Bu skor; talep potansiyeli, lojistik erişilebilirlik, pazar erişimi, teşvik,
+          vergi avantajı ve ödeme güvenilirliği göstergelerinin birlikte değerlendirilmesiyle oluşur.
+        </p>
+      </div>
+
+      <div className="ai-detail-card">
+        <h3>Güçlü Taraflar</h3>
+        <p>
+          Talep skoru {scores.talep}/10, lojistik skoru {scores.lojistik_maliyet}/10
+          ve pazar erişimi {scores.pazar_erisimi}/10 olarak hesaplanmıştır. Bu değerler,
+          ürünün hedef pazarda araştırmaya değer bir ticari potansiyele sahip olduğunu gösterir.
+        </p>
+      </div>
+
+      <div className="ai-detail-card">
+        <h3>Dikkat Edilmesi Gerekenler</h3>
+        <p>
+          Tahmini vergi oranı %{best.raw_data.tax_rate_estimate} ve rota tipi
+          {best.route.route_type} olarak görünmektedir. Risk seviyesi: {risk}.
+          Nihai karar öncesinde GTİP kodu, ürün standardı, ithalat vergisi ve lojistik teklifleri
+          güncel resmi kaynaklardan kontrol edilmelidir.
+        </p>
+      </div>
+
+      <div className="ai-detail-card">
+        <h3>İlk Aksiyon Önerisi</h3>
+        <p>
+          İlk adımda {best.country} için rakip fiyatları, pazar yerleri, B2B alıcı listeleri
+          ve ürün sertifikasyon şartları incelenmelidir. Ardından en az iki lojistik firmasından
+          navlun teklifi alınarak maliyet doğrulaması yapılmalıdır.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function Results({ a, best, downloadReportPdf }) {
   const totalCountries = a.results?.length || 0;
   const topThree = a.results?.slice(0, 3) || [];
+  const bestScorePercent = best ? Math.round(best.market_score * 10) : 0;
 
   return (
-    <section className="report-area">
-      <div className="analysis-header">
+    <section className="report-area pro-results">
+      <div className="analysis-header pro-analysis-header">
         <div>
           <span className="section-kicker">Analiz Sonucu</span>
-          <h2>Ürün Pazarı İnceleme Raporu</h2>
+          <h2>Ürün Pazarı İnceleme Dashboard’u</h2>
           <p>
-            Seçilen ürün için hedef ülke, puan kırılımları, lojistik rota,
-            vergi durumu ve ihracat yol haritası ayrı bölümler halinde gösterilir.
+            Seçilen ürün için en uygun hedef pazar, skor kırılımları, lojistik rota,
+            vergi etkisi ve ihracat yol haritası ayrı bölümler halinde analiz edilmiştir.
           </p>
         </div>
       </div>
 
-      <div className="summary clean-summary">
-        <div>
-          <MapPinned />
-          <p>En uygun pazar</p>
-          <h2>{a.best_country}</h2>
-          <small>{a.main_category} / {a.sub_category}</small>
+      {best && (
+        <div className="best-market-hero">
+          <div className="best-market-left">
+            <span className="best-label">En uygun hedef pazar</span>
+            <h2>
+              <span>{getFlag(best.country)}</span> {best.country}
+            </h2>
+            <p>
+              {a.main_category} / {a.sub_category} ürünü için sistemin önerdiği
+              en güçlü ihracat pazarı.
+            </p>
+            <div className="best-tags">
+              <span>{getScoreLevel(best.market_score)}</span>
+              <span>{getRiskLevel(best)}</span>
+              <span>{best.route.route_type}</span>
+            </div>
+          </div>
+
+          <div className="score-ring-card">
+            <div
+              className="score-ring"
+              style={{
+                background: `conic-gradient(var(--blue) ${bestScorePercent}%, #e5e7eb ${bestScorePercent}% 100%)`
+              }}
+            >
+              <div>
+                <strong>{bestScorePercent}%</strong>
+                <small>Uygunluk</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="metric-dashboard">
+        <div className="metric-card">
+          <TrendingUp />
+          <p>Talep Skoru</p>
+          <h3>{best?.scores?.talep}/10</h3>
+          <small>Ürün talep potansiyeli</small>
         </div>
 
-        {best && (
-          <div>
-            <CheckCircle2 />
-            <p>Genel skor</p>
-            <h2>{best.market_score}/10</h2>
-            <small>Talep + lojistik + vergi + teşvik</small>
-          </div>
-        )}
+        <div className="metric-card">
+          <Route />
+          <p>Lojistik</p>
+          <h3>{best?.scores?.lojistik_maliyet}/10</h3>
+          <small>{best?.route?.distance_km_from_turkey} km / {best?.route?.route_type}</small>
+        </div>
 
-        <div>
-          <Ship />
-          <p>Karşılaştırılan ülke</p>
-          <h2>{totalCountries}</h2>
-          <small>En uygun 10 hedef pazar</small>
+        <div className="metric-card">
+          <Landmark />
+          <p>Vergi Avantajı</p>
+          <h3>{best?.scores?.vergi_avantaji}/10</h3>
+          <small>Tahmini vergi: %{best?.raw_data?.tax_rate_estimate}</small>
+        </div>
+
+        <div className="metric-card">
+          <ShieldCheck />
+          <p>Risk Seviyesi</p>
+          <h3>{best ? getRiskLevel(best) : "-"}</h3>
+          <small>Vergi + mesafe + rota etkisi</small>
         </div>
       </div>
 
@@ -1242,22 +1385,15 @@ function Results({ a, best, downloadReportPdf }) {
         <div className="section-title-row">
           <div>
             <span className="section-kicker">01</span>
-            <h2>Yapay Zekâ Destekli Yönetici Özeti</h2>
-          </div>
-        </div>
-
-        <div className="ai professional-ai">
-          <Brain />
-          <div>
-            <p>{a.ai_recommendation}</p>
+            <h2>Detaylı Yapay Zekâ Yorumu</h2>
             <p>
-              Bu sonuç, KOBİ seviyesindeki bir ihracatçı için ilk pazar araştırması,
-              hedef ülke seçimi ve operasyonel yol haritası oluşturma amacıyla
-              kullanılabilir. Nihai ihracat kararı öncesinde güncel GTİP, ithalat vergisi,
-              ürün sertifikası, alıcı güvenilirliği ve lojistik teklifleri ayrıca doğrulanmalıdır.
+              Sistem yalnızca skor üretmez; skorun hangi nedenlerle oluştuğunu
+              ve ihracatçı için ne anlama geldiğini açıklar.
             </p>
           </div>
         </div>
+
+        <DetailedAiComment a={a} best={best} />
       </div>
 
       <div className="result-section">
@@ -1270,9 +1406,9 @@ function Results({ a, best, downloadReportPdf }) {
 
         <div className="top-market-grid">
           {topThree.map((x, i) => (
-            <div className="top-market-card" key={x.country}>
+            <div className="top-market-card pro-top-card" key={x.country}>
               <span>#{i + 1}</span>
-              <h3>{x.country}</h3>
+              <h3>{getFlag(x.country)} {x.country}</h3>
               <p>{x.region}</p>
               <b>{x.market_score}/10</b>
               <small>{x.route.route_type} / {x.route.distance_km_from_turkey} km</small>
@@ -1285,6 +1421,30 @@ function Results({ a, best, downloadReportPdf }) {
         <div className="section-title-row">
           <div>
             <span className="section-kicker">03</span>
+            <h2>Skor Kırılım Grafiği</h2>
+            <p>En uygun ülkenin hangi başlıklarda güçlü olduğu aşağıda gösterilir.</p>
+          </div>
+        </div>
+
+        {best && (
+          <div className="score-chart">
+            {Object.entries(best.scores).map(([key, value]) => (
+              <div className="chart-row" key={key}>
+                <span>{key.replaceAll("_", " ")}</span>
+                <div>
+                  <i style={{ width: `${value * 10}%` }} />
+                </div>
+                <b>{value}/10</b>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="result-section">
+        <div className="section-title-row">
+          <div>
+            <span className="section-kicker">04</span>
             <h2>Ülke Puan Detayları</h2>
             <p>Her ülkenin neden o puanı aldığı aşağıdaki kartlarda ayrı ayrı gösterilir.</p>
           </div>
@@ -1300,7 +1460,7 @@ function Results({ a, best, downloadReportPdf }) {
       <div className="result-section">
         <div className="section-title-row">
           <div>
-            <span className="section-kicker">04</span>
+            <span className="section-kicker">05</span>
             <h2>{a.best_country} İçin Yol Haritası</h2>
           </div>
         </div>
@@ -1333,22 +1493,24 @@ function Results({ a, best, downloadReportPdf }) {
 
 function Country({ x, i }) {
   return (
-    <div className="card">
+    <div className="card pro-country-card">
       <div className="cardtop">
         <h3>
-          #{i + 1} {x.country}
+          #{i + 1} {getFlag(x.country)} {x.country}
         </h3>
         <b>{x.market_score}/10</b>
       </div>
 
-      <p>
-        {x.route.route_type} / {x.route.distance_km_from_turkey} km
-      </p>
+      <div className="country-meta">
+        <span>{x.region}</span>
+        <span>{x.route.route_type}</span>
+        <span>{x.route.distance_km_from_turkey} km</span>
+      </div>
 
       {Object.entries(x.scores).map(([k, v]) => (
         <div className="score" key={k}>
           <span>
-            {k}: {v}/10
+            {k.replaceAll("_", " ")}: {v}/10
           </span>
           <div>
             <i style={{ width: `${v * 10}%` }} />
