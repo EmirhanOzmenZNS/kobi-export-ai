@@ -1,3 +1,5 @@
+
+import logo from "./assets/logo.png";
 import { useEffect, useMemo, useState } from "react";
 import {
   BarChart3,
@@ -34,7 +36,20 @@ const API_URL = "https://kobi-export-ai.onrender.com";
 
 const defaultConfig = {
   brand: {
-    text: "KOBİ Export AI",
+    text: <div className="brandWrap">
+
+    <img
+      src={logo}
+      alt="KOBİ Export AI"
+      className="mainLogo"
+    />
+
+    <div className="brandTexts">
+        <h1>KOBİ Export AI</h1>
+        <span>AI Destekli İhracat Platformu</span>
+    </div>
+
+</div>,
     fontSize: 22,
     color: "#172554",
     x: 0,

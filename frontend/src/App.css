@@ -735,3 +735,35 @@
     grid-template-columns: 1fr;
   }
 }
+.brandWrap{
+display:flex;
+align-items:center;
+gap:18px;
+padding:8px 0;
+}
+
+.mainLogo{
+width:90px;
+height:90px;
+object-fit:contain;
+transition:.3s;
+}
+
+.mainLogo:hover{
+transform:scale(1.05);
+}
+
+.brandTexts h1{
+margin:0;
+font-size:40px;
+font-weight:800;
+color:#13295c;
+line-height:1;
+}
+
+.brandTexts span{
+display:block;
+margin-top:8px;
+font-size:14px;
+color:#7b8093;
+}
